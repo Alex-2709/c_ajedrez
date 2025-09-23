@@ -28,63 +28,70 @@ document.getElementById("confirmPaymentBtn").addEventListener("click", function(
     document.getElementById("registrationForm").style.display = "block";
 });
 
-// ==== Validar y enviar formulario ====
-document.getElementById("registrationForm").addEventListener("submit", async function(e) {
+// ==== Envío del formulario ====
+document.getElementById("registrationForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
 
-    // Convertir imágenes a base64
     const voucherFile = formData.get('voucher');
     const dniFile = formData.get('dniImage');
+
+    if (!voucherFile || !dniFile) {
+        alert("❌ Debes subir ambas imágenes antes de enviar.");
+        return;
+    }
 
     const voucherBase64 = await fileToBase64(voucherFile);
     const dniBase64 = await fileToBase64(dniFile);
 
     const data = {
-        fullName: formData.get('fullName'),
-        birthDate: formData.get('birthDate'),
-        age: formData.get('age'),
-        dni: formData.get('dni'),
-        district: formData.get('district'),
-        category: formData.get('category'),
-        phone: formData.get('phone'),
-        guardianName: formData.get('guardianName'),
-        voucher: voucherBase64,
-        dniImage: dniBase64
+        "Fecha y Hora": new Date().toLocaleString(),
+        "Nombres y Apellidos": formData.get('fullName'),
+        "Fecha de Nacimiento": formData.get('birthDate'),
+        "Edad": formData.get('age'),
+        "DNI": formData.get('dni'),
+        "Distrito": formData.get('district'),
+        "Categoría": formData.get('category'),
+        "Teléfono": formData.get('phone'),
+        "Apoderado": formData.get('guardianName'),
+        "Voucher (URL)": voucherBase64,
+        "DNI Foto (URL)": dniBase64
     };
 
+    console.log("Datos enviados a SheetBest:", data); // ✅ Para depurar
+
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwZlxYObb_t9lut9QaO1-hsEmsFiIhtdM0bjgDCT1z-oPDwhlXtOuQhuDFhoXTRmorhQQ/exec', { // <-- ¡PEGA AQUÍ TU URL DE DESPLIEGUE!
+        const response = await fetch('https://api.sheetbest.com/sheets/82607141-bae6-46cf-adb1-44dcbfc122dd', {
             method: 'POST',
-            body: JSON.stringify(data),
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(data)
         });
 
-        const result = await response.json();
-
-        if (result.result === "success") {
+        if (response.ok) {
             alert("✅ ¡Inscripción enviada! Revisaremos tu voucher y te confirmaremos por WhatsApp en 24 horas.");
 
-            // Limpiar y mostrar mensaje de éxito
             this.reset();
             document.getElementById("step2").innerHTML = `
                 <h2>¡Gracias por inscribirte! 🎉</h2>
                 <p>Revisaremos tu comprobante de pago y DNI, y te enviaremos confirmación en menos de 24 horas.</p>
-                <p>Puedes ver tu inscripción registrada en nuestra base de datos. ¡Prepara tus mejores jugadas! ♟️</p>
+                <p>¡Prepara tus mejores jugadas! ♟️</p>
             `;
         } else {
-            throw new Error("Error al guardar los datos.");
+            const errorText = await response.text();
+            console.error("Respuesta de SheetBest:", errorText);
+            throw new Error("Error al guardar en Sheets.");
         }
     } catch (error) {
-        alert("❌ Hubo un error al enviar tu inscripción. Por favor, intenta nuevamente o contacta al organizador.");
+        alert("❌ Hubo un error. Por favor, intenta nuevamente.");
         console.error(error);
     }
 });
 
-// Función auxiliar para convertir archivo a base64
+// ==== Convertir archivo a base64 ====
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
