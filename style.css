@@ -1,0 +1,202 @@
+/* ==== Estilos generales ==== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0d9b5; /* Color claro de tablero */
+    background-image: linear-gradient(45deg, #f0d9b5 25%, transparent 25%),
+                      linear-gradient(-45deg, #f0d9b5 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #b58863 75%),
+                      linear-gradient(-45deg, transparent 75%, #b58863 75%);
+    background-size: 50px 50px;
+    background-position: 0 0, 0 25px, 25px -25px, -25px 0px;
+    color: #333;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 10;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #3d2b1f;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+h1 {
+    font-size: 2.5rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h1:after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: #b58863;
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+/* ==== Contador ==== */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+    font-weight: bold;
+}
+
+.countdown div {
+    background: #b58863;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 80px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.countdown span {
+    display: block;
+    font-size: 1.5rem;
+}
+
+.countdown small {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ==== Paso 1 - Pago ==== */
+.step {
+    background: #fff8e7;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-left: 5px solid #b58863;
+}
+
+.yape-instructions {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 2px dashed #4caf50;
+}
+
+.yape-instructions p {
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.yape-number {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #2e7d32;
+    background: #c8e6c9;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #b58863;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #8b6a4d;
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* ==== Formulario ==== */
+#registrationForm {
+    display: none; /* Oculto hasta que se confirme pago */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #3d2b1f;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d4b996;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fdf6ec;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #b58863;
+}
+
+/* ==== Footer ==== */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 600px) {
+    .countdown {
+        flex-wrap: wrap;
+    }
+    .countdown div {
+        min-width: 70px;
+        padding: 8px 10px;
+    }
+    .countdown span {
+        font-size: 1.2rem;
+    }
+}
+
+/* Icono de ajedrez decorativo */
+.chess-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin: 20px 0;
+    color: #3d2b1f;
+}
