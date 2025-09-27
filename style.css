@@ -182,7 +182,9 @@ footer {
 /* ==== Responsive ==== */
 @media (max-width: 600px) {
     .countdown {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
     .countdown div {
         min-width: 70px;
@@ -199,4 +201,97 @@ footer {
     text-align: center;
     margin: 20px 0;
     color: #3d2b1f;
+}
+
+#loaderOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(240, 217, 181, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader {
+    font-size: 5rem;
+    animation: spin 1.2s linear infinite;
+    color: #3d2b1f;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+@media (max-width: 600px) {
+    body {
+        padding: 5px;
+        background-size: 30px 30px;
+    }
+    .container {
+        padding: 10px 3vw;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    h1 {
+        font-size: 1.3rem;
+        padding-bottom: 8px;
+    }
+    h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    .chess-icon {
+        font-size: 2rem;
+        margin: 10px 0;
+    }
+    .step {
+        padding: 12px 4vw;
+        margin-bottom: 18px;
+        border-radius: 7px;
+    }
+    .yape-instructions {
+        padding: 10px 4vw;
+        border-radius: 7px;
+        margin: 10px 0;
+        font-size: 0.98rem;
+    }
+    .yape-number {
+        font-size: 1.1rem;
+        padding: 7px;
+        border-radius: 6px;
+    }
+    .btn {
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 7px;
+        margin: 14px 0;
+    }
+    .form-group {
+        margin-bottom: 14px;
+    }
+    label {
+        font-size: 0.98rem;
+        margin-bottom: 5px;
+    }
+    input, textarea, select {
+        font-size: 0.98rem;
+        padding: 10px;
+        border-radius: 7px;
+    }
+    footer {
+        font-size: 0.85rem;
+        margin-top: 20px;
+    }
+    #loaderOverlay .loader {
+        font-size: 3rem;
+    }
 }

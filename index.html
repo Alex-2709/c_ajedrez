@@ -86,12 +86,12 @@
 
         <div class="form-group">
             <label for="voucher">Adjuntar imagen del voucher o captura del pago (obligatorio) *</label>
-            <input type="file" id="voucher" name="voucher" accept="image/*" required>
+            <input type="file" id="voucher" name="voucher" accept="image/png" required>
         </div>
 
         <div class="form-group">
             <label for="dniImage">Adjuntar foto del DNI del participante (obligatorio) *</label>
-            <input type="file" id="dniImage" name="dniImage" accept="image/*" required>
+            <input type="file" id="dniImage" name="dniImage" accept="image/png" required>
         </div>
 
         <button type="submit" class="btn">Enviar Inscripción</button>
@@ -103,6 +103,11 @@
             <p>📅 Fecha del evento: 18 de Octubre de 2025 | ⏰ Hora: 10:00 AM</p><p>📍 Lugar: Av. Jose Carlos Mariategui 2099 (Alt. paradero bateria) El Agustino</p>
         </footer>
     </div>
+    
+<!-- Loader animado con ficha de caballo -->
+<div id="loaderOverlay">
+    <div class="loader">♘</div>
+</div>
 
     <script src="script.js"></script>
 </body>

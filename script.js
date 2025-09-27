@@ -42,8 +42,35 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
         return;
     }
 
-    const voucherBase64 = await fileToBase64(voucherFile);
-    const dniBase64 = await fileToBase64(dniFile);
+    document.getElementById("loaderOverlay").style.display = "flex";
+
+     // === Validar si el DNI ya existe ===
+    const dniIngresado = formData.get('dni');
+    try {
+        const consulta = await fetch('https://api.sheetbest.com/sheets/cb639a0a-9ad7-45e6-ba92-c496a4a9ede3/search?DNI=' + encodeURIComponent(dniIngresado));
+        const registros = await consulta.json();
+        if (registros.length > 0) {
+            document.getElementById("loaderOverlay").style.display = "none";
+            document.getElementById("step2").innerHTML = `
+                <h2>❗ Ya existe una inscripción con este DNI</h2>
+                <p>Hemos detectado que este número de DNI ya fue registrado previamente.</p>
+                <p>Si crees que es un error, comunícate por WhatsApp al <strong>941 770 333</strong>.</p>
+                <p>♟️ ¡Gracias por tu interés en el torneo!</p>
+            `;
+            return;
+        }
+    } catch (error) {
+        document.getElementById("loaderOverlay").style.display = "none";
+        document.getElementById("step2").innerHTML = `
+            <h2>❌ Error al validar DNI</h2>
+            <p>No pudimos verificar si tu DNI ya está registrado. Intenta nuevamente o comunícate por WhatsApp al <strong>941 770 333</strong>.</p>
+        `;
+        return;
+    }
+
+
+    const voucherUrl = await uploadToImageBB(voucherFile);
+    const dniUrl = await uploadToImageBB(dniFile);
 
     const data = {
         "Fecha y Hora": new Date().toLocaleString(),
@@ -55,14 +82,20 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
         "Categoría": formData.get('category'),
         "Teléfono": formData.get('phone'),
         "Apoderado": formData.get('guardianName'),
-        "Voucher (URL)": voucherBase64,
-        "DNI Foto (URL)": dniBase64
+        "Voucher (URL)": voucherUrl,
+        "DNI Foto (URL)": dniUrl
     };
 
     console.log("Datos enviados a SheetBest:", data); // ✅ Para depurar
 
+
     try {
-        const response = await fetch('https://api.sheetbest.com/sheets/82607141-bae6-46cf-adb1-44dcbfc122dd', {
+
+       
+       
+
+
+        const response = await fetch('https://api.sheetbest.com/sheets/cb639a0a-9ad7-45e6-ba92-c496a4a9ede3', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -72,9 +105,10 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
         });
 
         if (response.ok) {
-            alert("✅ ¡Inscripción enviada! Revisaremos tu voucher y te confirmaremos por WhatsApp en 24 horas.");
+            document.getElementById("loaderOverlay").style.display = "none";
 
             this.reset();
+            
             document.getElementById("step2").innerHTML = `
                 <h2>¡Gracias por inscribirte! 🎉</h2>
                 <p>Revisaremos tu comprobante de pago y DNI, y te enviaremos confirmación en menos de 24 horas.</p>
@@ -86,17 +120,33 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
             throw new Error("Error al guardar en Sheets.");
         }
     } catch (error) {
-        alert("❌ Hubo un error. Por favor, intenta nuevamente.");
+        document.getElementById("loaderOverlay").style.display = "none";
+
+        document.getElementById("step2").innerHTML = `
+            <h2>❌ Error al enviar</h2>
+            <p>Ocurrió un problema al registrar tu inscripción. Por favor, verifica tu conexión o intenta más tarde.</p>
+            <p>Si el problema persiste, puedes comunicarte por WhatsApp al <strong>941 770 333</strong>.</p>
+            <p>♟️ ¡No te rindas, cada jugada cuenta!</p>
+        `;
+
         console.error(error);
     }
 });
 
-// ==== Convertir archivo a base64 ====
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+// ==== Convertir archivo con ImageBB ====
+async function uploadToImageBB(file) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("https://api.imgbb.com/1/upload?key=ee779967dce870c0aff586ed0a98fbe1", {
+        method: "POST",
+        body: formData
     });
+
+    const data = await response.json();
+    if (data.success) {
+        return data.data.url; // URL directo de la imagen
+    } else {
+        throw new Error("Error al subir imagen a ImageBB");
+    }
 }
