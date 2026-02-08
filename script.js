@@ -1,5 +1,5 @@
 // ==== Contador regresivo ====
-const countDownDate = new Date("Oct 18, 2025 09:00:00").getTime(); // ¡AJUSTA ESTA FECHA!
+const countDownDate = new Date("Feb 21, 2026 10:00:00").getTime(); // ¡AJUSTA ESTA FECHA!
 
 const x = setInterval(function() {
     const now = new Date().getTime();
@@ -47,7 +47,7 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
      // === Validar si el DNI ya existe ===
     const dniIngresado = formData.get('dni');
     try {
-        const consulta = await fetch('https://api.sheetbest.com/sheets/cb639a0a-9ad7-45e6-ba92-c496a4a9ede3/search?DNI=' + encodeURIComponent(dniIngresado));
+        const consulta = await fetch('https://api.sheetbest.com/sheets/68e58eca-b460-4976-92f4-39d5cda70238/search?DNI=' + encodeURIComponent(dniIngresado));
         const registros = await consulta.json();
         if (registros.length > 0) {
             document.getElementById("loaderOverlay").style.display = "none";
@@ -95,7 +95,7 @@ document.getElementById("registrationForm").addEventListener("submit", async fun
        
 
 
-        const response = await fetch('https://api.sheetbest.com/sheets/cb639a0a-9ad7-45e6-ba92-c496a4a9ede3', {
+        const response = await fetch('https://api.sheetbest.com/sheets/68e58eca-b460-4976-92f4-39d5cda70238', {
             method: 'POST',
             mode: 'cors',
             headers: {
